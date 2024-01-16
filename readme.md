@@ -1,4 +1,3 @@
-# Explication du code en français
 
 ## Importation des modules
 
