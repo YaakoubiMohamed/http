@@ -1,3 +1,14 @@
+// function somme(a){
+//   return ++a;
+// }
+// console.log(somme()); // NaN not a number
+a=5
+b=3
+c= a+b;
+console.log(c);
+
+
+
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
@@ -11,8 +22,8 @@ app.use(bodyParser.json());
 const generateOptions = (path, method, data = null) => {
   return {
     hostname: 'jsonplaceholder.typicode.com',
-    path: path,
-    method: method,
+    path: path,// 'users'
+    method: method, // 'GET'
     headers: {
       'Content-Type': 'application/json',
     },
@@ -27,10 +38,10 @@ const makeRequest = (options) => {
     const req = http.request(options, (res) => {
       let responseData = '';
 
-      res.on('data', (chunk) => {
-        responseData += chunk;
+      res.on('data', (data) => {
+        responseData += data;
       });
-
+      console.log(responseData);
       res.on('end', () => {
         // Utilisation de try-catch pour la conversion JSON
         try {
@@ -49,10 +60,13 @@ const makeRequest = (options) => {
     req.end();
   });
 };
+()=>{
+
+}
 
 // Endpoint pour récupérer tous les utilisateurs
-app.get('/users', async (req, res) => {
-  const options = generateOptions('/users', 'GET');
+app.get('/todos', async (req, res) => {
+  const options = generateOptions('/todos', 'GET');
 
   try {
     const response = await makeRequest(options);
@@ -64,10 +78,9 @@ app.get('/users', async (req, res) => {
 });
 
 // Endpoint pour récupérer un utilisateur par ID
-app.get('/users/:id', async (req, res) => {
+app.get('/todos/:id', async (req, res) => {
   const userId = req.params.id;
-  const options = generateOptions(`/users/${userId}`, 'GET');
-
+  const options = generateOptions(`/todos/${userId}`, 'GET');
   try {
     const response = await makeRequest(options);
     res.json(response);
@@ -78,9 +91,9 @@ app.get('/users/:id', async (req, res) => {
 });
 
 // Endpoint pour créer un nouvel utilisateur
-app.post('/users', async (req, res) => {
+app.post('/todos', async (req, res) => {
   const newUser = req.body;
-  const options = generateOptions('/users', 'POST', newUser);
+  const options = generateOptions('/todos', 'POST', newUser);
 
   try {
     const response = await makeRequest(options);
@@ -92,13 +105,14 @@ app.post('/users', async (req, res) => {
 });
 
 // Endpoint pour mettre à jour un utilisateur par ID
-app.put('/users/:id', async (req, res) => {
+app.put('/todos/:id', async (req, res) => {
   const userId = req.params.id;
   const updatedUser = req.body;
-  const options = generateOptions(`/users/${userId}`, 'PUT', updatedUser);
+  const options = generateOptions(`/todos/${userId}`, 'PUT', updatedUser);
 
   try {
     const response = await makeRequest(options);
+    console.log(response);
     res.json(response);
   } catch (error) {
     console.error(error);
@@ -107,9 +121,9 @@ app.put('/users/:id', async (req, res) => {
 });
 
 // Endpoint pour supprimer un utilisateur par ID
-app.delete('/users/:id', async (req, res) => {
+app.delete('/todos/:id', async (req, res) => {
   const userId = req.params.id;
-  const options = generateOptions(`/users/${userId}`, 'DELETE');
+  const options = generateOptions(`/todos/${userId}`, 'DELETE');
 
   try {
     await makeRequest(options);
